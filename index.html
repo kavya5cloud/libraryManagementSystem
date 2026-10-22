@@ -1,0 +1,1000 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Library Management System</title>
+
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: Arial, sans-serif;
+    }
+
+    body {
+      background: #f5f7fb;
+      color: #202b3c;
+    }
+
+    .layout {
+      display: flex;
+      min-height: 100vh;
+    }
+
+    .sidebar {
+      width: 245px;
+      background: #17243a;
+      color: white;
+      padding: 28px 18px;
+      flex-shrink: 0;
+    }
+
+    .logo {
+      font-size: 21px;
+      font-weight: bold;
+      margin-bottom: 40px;
+    }
+
+    .logo span {
+      color: #69d3b0;
+    }
+
+    .menu-label {
+      color: #8e9bb0;
+      font-size: 11px;
+      letter-spacing: 1.5px;
+      margin: 25px 12px 12px;
+    }
+
+    .nav-item {
+      display: block;
+      width: 100%;
+      padding: 13px 14px;
+      margin-bottom: 7px;
+      color: #c4cede;
+      text-decoration: none;
+      border: none;
+      background: transparent;
+      border-radius: 8px;
+      text-align: left;
+      font-size: 14px;
+      cursor: pointer;
+    }
+
+    .nav-item:hover,
+    .nav-item.active {
+      background: #2c3d55;
+      color: #70e0bc;
+    }
+
+    .main {
+      flex: 1;
+      min-width: 0;
+      padding: 30px;
+    }
+
+    .topbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 15px;
+      margin-bottom: 30px;
+    }
+
+    h1 {
+      font-size: 27px;
+      margin-bottom: 8px;
+    }
+
+    .muted {
+      color: #8591a3;
+      font-size: 13px;
+    }
+
+    .profile {
+      background: white;
+      padding: 11px 15px;
+      border-radius: 10px;
+      font-size: 13px;
+      box-shadow: 0 3px 15px #17243a08;
+    }
+
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 18px;
+      margin-bottom: 28px;
+    }
+
+    .card {
+      background: white;
+      border-radius: 13px;
+      padding: 22px;
+      box-shadow: 0 4px 18px #18243a07;
+    }
+
+    .stat-top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      color: #778398;
+      font-size: 13px;
+      gap: 8px;
+    }
+
+    .stat-icon {
+      background: #e8f8f2;
+      color: #169b75;
+      padding: 10px;
+      border-radius: 9px;
+      font-size: 19px;
+    }
+
+    .stat-number {
+      font-size: 30px;
+      font-weight: bold;
+      margin: 17px 0 8px;
+    }
+
+    .positive {
+      color: #169b75;
+      font-size: 12px;
+    }
+
+    .section-heading {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 18px;
+    }
+
+    h2 {
+      font-size: 18px;
+    }
+
+    button,
+    input,
+    select {
+      font: inherit;
+    }
+
+    .btn {
+      border: none;
+      background: #168c70;
+      color: white;
+      padding: 11px 15px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 13px;
+    }
+
+    .btn:hover {
+      background: #11735b;
+    }
+
+    .secondary {
+      background: #e9f5f0;
+      color: #168c70;
+    }
+
+    .secondary:hover {
+      background: #d6eee4;
+    }
+
+    .content-grid {
+      display: grid;
+      grid-template-columns: minmax(0, 1.7fr) minmax(260px, 1fr);
+      gap: 22px;
+      align-items: start;
+    }
+
+    .table-tools {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 18px;
+    }
+
+    .table-tools input,
+    .table-tools select {
+      padding: 10px;
+      border: 1px solid #e1e6ed;
+      border-radius: 8px;
+      background: white;
+      min-width: 0;
+    }
+
+    .table-tools input {
+      flex: 1;
+      width: 100%;
+    }
+
+    .table-wrap {
+      overflow-x: auto;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      text-align: left;
+      white-space: nowrap;
+    }
+
+    th {
+      color: #8792a3;
+      font-size: 11px;
+      font-weight: normal;
+      padding: 13px 10px;
+      border-bottom: 1px solid #edf0f5;
+    }
+
+    td {
+      padding: 17px 10px;
+      font-size: 12px;
+      border-bottom: 1px solid #f0f2f6;
+    }
+
+    tr:last-child td {
+      border-bottom: none;
+    }
+
+    .book-title {
+      font-weight: bold;
+      font-size: 13px;
+      margin-bottom: 5px;
+    }
+
+    .status {
+      display: inline-block;
+      padding: 6px 9px;
+      border-radius: 20px;
+      font-size: 11px;
+    }
+
+    .available {
+      color: #168c70;
+      background: #e5f7ef;
+    }
+
+    .borrowed {
+      color: #b77b16;
+      background: #fff4d9;
+    }
+
+    .overdue {
+      color: #d34e4e;
+      background: #ffebeb;
+    }
+
+    .activity {
+      display: flex;
+      gap: 13px;
+      padding: 17px 0;
+      border-bottom: 1px solid #eff1f5;
+    }
+
+    .activity:last-child {
+      border: none;
+    }
+
+    .avatar {
+      width: 39px;
+      height: 39px;
+      border-radius: 10px;
+      display: grid;
+      place-items: center;
+      background: #e7f4ef;
+      color: #168c70;
+      font-weight: bold;
+      flex-shrink: 0;
+    }
+
+    .activity p {
+      font-size: 13px;
+      line-height: 1.5;
+    }
+
+    .activity small {
+      display: block;
+      color: #8994a4;
+      font-size: 11px;
+      margin-top: 5px;
+    }
+
+    .quick-actions {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      margin-top: 22px;
+    }
+
+    .quick-actions button {
+      min-height: 72px;
+      line-height: 1.7;
+    }
+
+    .empty {
+      padding: 25px;
+      text-align: center;
+      color: #8591a3;
+    }
+
+    .page-panel {
+      display: none;
+    }
+
+    .page-panel.active {
+      display: block;
+    }
+
+    .notice {
+      font-size: 13px;
+      margin-bottom: 16px;
+      color: #168c70;
+    }
+
+    @media (max-width: 1050px) {
+      .stats {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .content-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (max-width: 650px) {
+      .layout {
+        display: block;
+      }
+
+      .sidebar {
+        width: 100%;
+        padding: 18px;
+      }
+
+      .logo {
+        margin-bottom: 18px;
+      }
+
+      .menu-label {
+        display: none;
+      }
+
+      .nav-list {
+        display: flex;
+        gap: 6px;
+        overflow-x: auto;
+      }
+
+      .nav-item {
+        white-space: nowrap;
+        width: auto;
+        margin: 0;
+      }
+
+      .main {
+        padding: 20px 14px;
+      }
+
+      .stats {
+        gap: 10px;
+      }
+
+      .card {
+        padding: 15px;
+      }
+
+      .stat-number {
+        font-size: 25px;
+      }
+
+      h1 {
+        font-size: 22px;
+      }
+
+      .topbar {
+        align-items: flex-start;
+      }
+
+      .profile {
+        font-size: 11px;
+      }
+
+      .table-tools {
+        flex-wrap: wrap;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="layout">
+
+    <aside class="sidebar">
+      <div class="logo">📚 Libra<span>Space</span></div>
+
+      <div class="menu-label">MAIN MENU</div>
+
+      <nav class="nav-list">
+        <button class="nav-item active" data-page="dashboard">
+          ▦ Dashboard
+        </button>
+        <button class="nav-item" data-page="books">▤ Books</button>
+        <button class="nav-item" data-page="members">♙ Members</button>
+        <button class="nav-item" data-page="issued">↗ Issued Books</button>
+      </nav>
+
+      <div class="menu-label">MANAGEMENT</div>
+
+      <nav class="nav-list">
+        <button class="nav-item" data-page="returns">↩ Returns</button>
+        <button class="nav-item" data-page="reports">▥ Reports</button>
+      </nav>
+    </aside>
+
+    <main class="main">
+
+      <header class="topbar">
+        <div>
+          <h1 id="pageTitle">Dashboard Overview</h1>
+          <p class="muted" id="pageSubtitle">
+            Welcome back, Admin! Here's what's happening today.
+          </p>
+        </div>
+        <div class="profile">👤 Library Admin</div>
+      </header>
+
+      <div id="notice" class="notice"></div>
+
+      <section class="page-panel active" id="dashboard">
+
+        <div class="stats">
+          <div class="card">
+            <div class="stat-top">
+              Total Books <span class="stat-icon">📚</span>
+            </div>
+            <div class="stat-number" id="totalBooks">1,248</div>
+            <div class="positive">↑ Library collection</div>
+          </div>
+
+          <div class="card">
+            <div class="stat-top">
+              Active Members <span class="stat-icon">👥</span>
+            </div>
+            <div class="stat-number" id="totalMembers">356</div>
+            <div class="positive">Registered readers</div>
+          </div>
+
+          <div class="card">
+            <div class="stat-top">
+              Books Issued <span class="stat-icon">📖</span>
+            </div>
+            <div class="stat-number" id="totalIssued">84</div>
+            <div class="positive">Currently borrowed</div>
+          </div>
+
+          <div class="card">
+            <div class="stat-top">
+              Overdue Books <span class="stat-icon">⏰</span>
+            </div>
+            <div class="stat-number" id="totalOverdue">6</div>
+            <div style="color:#d34e4e;font-size:12px">
+              Need attention
+            </div>
+          </div>
+        </div>
+
+        <div class="content-grid">
+          <section class="card">
+            <div class="section-heading">
+              <h2>Book Inventory</h2>
+              <button class="btn" onclick="addBook()">+ Add Book</button>
+            </div>
+
+            <div class="table-tools">
+              <input
+                id="searchInput"
+                placeholder="Search books or authors..."
+                oninput="renderBooks()"
+              />
+              <select id="statusFilter" onchange="renderBooks()">
+                <option value="All">All Status</option>
+                <option value="Available">Available</option>
+                <option value="Borrowed">Borrowed</option>
+                <option value="Overdue">Overdue</option>
+              </select>
+            </div>
+
+            <div class="table-wrap">
+              <table>
+                <thead>
+                  <tr>
+                    <th>BOOK DETAILS</th>
+                    <th>ID</th>
+                    <th>STATUS</th>
+                    <th>ACTION</th>
+                  </tr>
+                </thead>
+                <tbody id="bookTable"></tbody>
+              </table>
+            </div>
+          </section>
+
+          <div>
+            <section class="card">
+              <div class="section-heading">
+                <h2>Recent Activity</h2>
+              </div>
+              <div id="activityList"></div>
+            </section>
+
+            <section class="card" style="margin-top:22px">
+              <h2>Quick Actions</h2>
+              <div class="quick-actions">
+                <button class="btn" onclick="addBook()">
+                  ＋<br />Add New Book
+                </button>
+                <button class="btn secondary" onclick="addMember()">
+                  ♙<br />Add Member
+                </button>
+                <button class="btn secondary" onclick="issueBook()">
+                  ↗<br />Issue Book
+                </button>
+                <button class="btn secondary" onclick="returnBook()">
+                  ↩<br />Return Book
+                </button>
+              </div>
+            </section>
+          </div>
+        </div>
+      </section>
+
+      <section class="page-panel" id="books">
+        <div class="card">
+          <div class="section-heading">
+            <h2>All Books</h2>
+            <button class="btn" onclick="addBook()">+ Add Book</button>
+          </div>
+          <div class="table-tools">
+            <input placeholder="Search books..." oninput="renderBooks(this.value)" />
+          </div>
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr><th>BOOK</th><th>ID</th><th>STATUS</th><th>ACTION</th></tr>
+              </thead>
+              <tbody id="allBookTable"></tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <section class="page-panel" id="members">
+        <div class="card">
+          <div class="section-heading">
+            <h2>Library Members</h2>
+            <button class="btn" onclick="addMember()">+ Add Member</button>
+          </div>
+          <div class="table-wrap">
+            <table>
+              <thead><tr><th>NAME</th><th>MEMBER ID</th><th>EMAIL</th></tr></thead>
+              <tbody id="memberTable"></tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <section class="page-panel" id="issued">
+        <div class="card">
+          <h2>Issued Books</h2>
+          <p class="muted" style="margin:10px 0 20px">
+            Books currently borrowed or overdue.
+          </p>
+          <div id="issuedList"></div>
+          <button class="btn" onclick="issueBook()">+ Issue a Book</button>
+        </div>
+      </section>
+
+      <section class="page-panel" id="returns">
+        <div class="card">
+          <h2>Return Management</h2>
+          <p class="muted" style="margin:10px 0 20px">
+            Select a borrowed book to mark it as returned.
+          </p>
+          <div id="returnList"></div>
+        </div>
+      </section>
+
+      <section class="page-panel" id="reports">
+        <div class="card">
+          <h2>Library Reports</h2>
+          <div class="stats" style="margin-top:22px">
+            <div><p class="muted">Total Books</p><h1 id="reportBooks">0</h1></div>
+            <div><p class="muted">Available</p><h1 id="reportAvailable">0</h1></div>
+            <div><p class="muted">Borrowed</p><h1 id="reportBorrowed">0</h1></div>
+            <div><p class="muted">Members</p><h1 id="reportMembers">0</h1></div>
+          </div>
+          <button class="btn" onclick="exportReport()">Download CSV Report</button>
+        </div>
+      </section>
+
+    </main>
+  </div>
+
+  <script>
+    // Sample data for the dashboard
+    let books = [
+      { id: "BK001", title: "Atomic Habits", author: "James Clear", status: "Available" },
+      { id: "BK002", title: "The Psychology of Money", author: "Morgan Housel", status: "Borrowed" },
+      { id: "BK003", title: "Clean Code", author: "Robert C. Martin", status: "Available" },
+      { id: "BK004", title: "Deep Work", author: "Cal Newport", status: "Overdue" },
+      { id: "BK005", title: "Ikigai", author: "Hector Garcia", status: "Available" },
+      { id: "BK006", title: "Rich Dad Poor Dad", author: "Robert Kiyosaki", status: "Borrowed" }
+    ];
+
+    let members = [
+      { id: "MB001", name: "Aarav Patel", email: "aarav@example.com" },
+      { id: "MB002", name: "Diya Shah", email: "diya@example.com" },
+      { id: "MB003", name: "Rohan Mehta", email: "rohan@example.com" }
+    ];
+
+    let activities = [
+      { initials: "AS", text: "Aarav Patel borrowed", book: "The Psychology of Money", time: "Today, 10:30 AM" },
+      { initials: "DS", text: "Diya Shah returned", book: "Clean Code", time: "Today, 09:15 AM" },
+      { initials: "RM", text: "Rohan Mehta borrowed", book: "Rich Dad Poor Dad", time: "Yesterday" }
+    ];
+
+    function statusClass(status) {
+      return status.toLowerCase();
+    }
+
+    function bookRows(list) {
+      if (!list.length) {
+        return '<tr><td colspan="4" class="empty">No books found.</td></tr>';
+      }
+
+      return list.map(book => `
+        <tr>
+          <td>
+            <div class="book-title">${escapeHTML(book.title)}</div>
+            <div class="muted">${escapeHTML(book.author)}</div>
+          </td>
+          <td>${escapeHTML(book.id)}</td>
+          <td>
+            <span class="status ${statusClass(book.status)}">
+              ${book.status}
+            </span>
+          </td>
+          <td>
+            ${book.status !== "Available"
+              ? `<button class="btn secondary" onclick="completeReturn('${book.id}')">Return</button>`
+              : `<button class="btn secondary" onclick="issueSpecific('${book.id}')">Issue</button>`
+            }
+          </td>
+        </tr>
+      `).join("");
+    }
+
+    function escapeHTML(value) {
+      return String(value).replace(/[&<>"']/g, char => ({
+        "&": "&amp;",
+        "<": "&lt;",
+        ">": "&gt;",
+        '"': "&quot;",
+        "'": "&#39;"
+      })[char]);
+    }
+
+    function renderBooks(query) {
+      const search = (
+        query !== undefined
+          ? query
+          : document.getElementById("searchInput")?.value || ""
+      ).toLowerCase();
+
+      const filter = document.getElementById("statusFilter")?.value || "All";
+
+      const filtered = books.filter(book => {
+        const matchesSearch =
+          book.title.toLowerCase().includes(search) ||
+          book.author.toLowerCase().includes(search) ||
+          book.id.toLowerCase().includes(search);
+
+        return matchesSearch &&
+          (filter === "All" || book.status === filter);
+      });
+
+      document.getElementById("bookTable").innerHTML = bookRows(filtered);
+      document.getElementById("allBookTable").innerHTML = bookRows(
+        books.filter(book =>
+          `${book.title} ${book.author} ${book.id}`
+            .toLowerCase().includes(search)
+        )
+      );
+
+      updateStats();
+    }
+
+    function updateStats() {
+      document.getElementById("totalBooks").textContent =
+        (1242 + books.length).toLocaleString();
+
+      document.getElementById("totalMembers").textContent =
+        (353 + members.length).toLocaleString();
+
+      document.getElementById("totalIssued").textContent =
+        books.filter(book => book.status !== "Available").length;
+
+      document.getElementById("totalOverdue").textContent =
+        books.filter(book => book.status === "Overdue").length;
+
+      document.getElementById("reportBooks").textContent = books.length;
+      document.getElementById("reportAvailable").textContent =
+        books.filter(book => book.status === "Available").length;
+      document.getElementById("reportBorrowed").textContent =
+        books.filter(book => book.status !== "Available").length;
+      document.getElementById("reportMembers").textContent = members.length;
+    }
+
+    function renderActivities() {
+      document.getElementById("activityList").innerHTML = activities.map(item => `
+        <div class="activity">
+          <div class="avatar">${escapeHTML(item.initials)}</div>
+          <div>
+            <p>${escapeHTML(item.text)}</p>
+            <p><strong>${escapeHTML(item.book)}</strong></p>
+            <small>${escapeHTML(item.time)}</small>
+          </div>
+        </div>
+      `).join("");
+    }
+
+    function renderMembers() {
+      document.getElementById("memberTable").innerHTML = members.map(member => `
+        <tr>
+          <td>${escapeHTML(member.name)}</td>
+          <td>${escapeHTML(member.id)}</td>
+          <td>${escapeHTML(member.email)}</td>
+        </tr>
+      `).join("");
+    }
+
+    function renderIssued() {
+      const issued = books.filter(book => book.status !== "Available");
+
+      document.getElementById("issuedList").innerHTML = issued.length
+        ? issued.map(book => `
+            <div class="activity">
+              <div class="avatar">📖</div>
+              <div>
+                <p><strong>${escapeHTML(book.title)}</strong></p>
+                <small>${escapeHTML(book.id)} · ${book.status}</small>
+              </div>
+            </div>
+          `).join("")
+        : '<p class="empty">No issued books.</p>';
+
+      document.getElementById("returnList").innerHTML = issued.length
+        ? issued.map(book => `
+            <div class="activity">
+              <div style="flex:1">
+                <p><strong>${escapeHTML(book.title)}</strong></p>
+                <small>${escapeHTML(book.id)} · ${book.status}</small>
+              </div>
+              <button class="btn" onclick="completeReturn('${book.id}')">
+                Mark Returned
+              </button>
+            </div>
+          `).join("")
+        : '<p class="empty">All books have been returned.</p>';
+    }
+
+    function refresh() {
+      renderBooks();
+      renderActivities();
+      renderMembers();
+      renderIssued();
+    }
+
+    function notify(message) {
+      document.getElementById("notice").textContent = message;
+    }
+
+    function addBook() {
+      const title = prompt("Enter book title:");
+      if (!title || !title.trim()) return;
+
+      const author = prompt("Enter author name:");
+      if (!author || !author.trim()) return;
+
+      const id = "BK" + String(Date.now()).slice(-6);
+
+      books.unshift({
+        id,
+        title: title.trim(),
+        author: author.trim(),
+        status: "Available"
+      });
+
+      refresh();
+      notify("Book added successfully!");
+    }
+
+    function addMember() {
+      const name = prompt("Enter member name:");
+      if (!name || !name.trim()) return;
+
+      const email = prompt("Enter member email:");
+      if (!email || !email.trim()) return;
+
+      members.push({
+        id: "MB" + String(Date.now()).slice(-6),
+        name: name.trim(),
+        email: email.trim()
+      });
+
+      refresh();
+      notify("Member added successfully!");
+    }
+
+    function issueSpecific(id) {
+      const book = books.find(item => item.id === id);
+      if (!book || book.status !== "Available") return;
+
+      const memberName = prompt("Enter the borrowing member's name:");
+      if (!memberName || !memberName.trim()) return;
+
+      book.status = "Borrowed";
+
+      activities.unshift({
+        initials: memberName.trim().split(/\s+/)
+          .map(part => part[0]).join("").slice(0, 2).toUpperCase(),
+        text: memberName.trim() + " borrowed",
+        book: book.title,
+        time: new Date().toLocaleString()
+      });
+
+      refresh();
+      notify("Book issued successfully!");
+    }
+
+    function issueBook() {
+      const available = books.filter(book => book.status === "Available");
+
+      if (!available.length) {
+        notify("No available books to issue.");
+        return;
+      }
+
+      const id = prompt(
+        "Enter book ID to issue:\n" +
+        available.map(book => `${book.id} - ${book.title}`).join("\n")
+      );
+
+      if (!id) return;
+
+      const book = books.find(item =>
+        item.id.toLowerCase() === id.trim().toLowerCase()
+      );
+
+      if (!book || book.status !== "Available") {
+        notify("Invalid book ID or book unavailable.");
+        return;
+      }
+
+      issueSpecific(book.id);
+    }
+
+    function completeReturn(id) {
+      const book = books.find(item => item.id === id);
+      if (!book || book.status === "Available") return;
+
+      book.status = "Available";
+
+      activities.unshift({
+        initials: "AD",
+        text: "Admin returned",
+        book: book.title,
+        time: new Date().toLocaleString()
+      });
+
+      refresh();
+      notify("Book returned successfully!");
+    }
+
+    function returnBook() {
+      const issued = books.filter(book => book.status !== "Available");
+
+      if (!issued.length) {
+        notify("There are no books to return.");
+        return;
+      }
+
+      const id = prompt(
+        "Enter book ID to return:\n" +
+        issued.map(book => `${book.id} - ${book.title}`).join("\n")
+      );
+
+      if (!id) return;
+
+      const book = books.find(item =>
+        item.id.toLowerCase() === id.trim().toLowerCase()
+      );
+
+      if (!book || book.status === "Available") {
+        notify("Invalid book ID or book is already available.");
+        return;
+      }
+
+      completeReturn(book.id);
+    }
+
+    function exportReport() {
+      const rows = [
+        ["ID", "Title", "Author", "Status"],
+        ...books.map(book => [
+          book.id, book.title, book.author, book.status
+        ])
+      ];
+
+      const csv = rows.map(row =>
+        row.map(value =>
+          '"' + String(value).replace(/"/g, '""') + '"'
+        ).join(",")
+      ).join("\r\n");
+
+      const blob = new Blob([csv], {
+        type: "text/csv;charset=utf-8;"
+      });
+
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement("a");
+      link.href = url;
+      link.download = "library-report.csv";
+      link.click();
+      URL.revokeObjectURL(url);
+      notify("CSV report downloaded.");
+    }
+
+    // Sidebar navigation
+    document.querySelectorAll(".nav-item").forEach(button => {
+      button.addEventListener("click", () => {
+        document.querySelectorAll(".nav-item").forEach(item =>
+          item.classList.remove("active")
+        );
+
+        button.classList.add("active");
+
+        document.querySelectorAll(".page-panel").forEach(panel =>
+          panel.classList.remove("active")
+        );
+
+        document.getElementById(button.dataset.page).classList.add("active");
+
+        const titles = {
+          dashboard: ["Dashboard Overview", "Welcome back, Admin! Here's what's happening today."],
+          books: ["Book Inventory", "Manage and search your library collection."],
+          members: ["Library Members", "View registered library members."],
+          issued: ["Issued Books", "Track currently borrowed books."],
+          returns: ["Returns", "Manage book return records."],
+          reports: ["Library Reports", "Review collection statistics and export data."]
+        };
+
+        document.getElementById("pageTitle").textContent =
+          titles[button.dataset.page][0];
+
+        document.getElementById("pageSubtitle").textContent =
+          titles[button.dataset.page][1];
+
+        notify("");
+      });
+    });
+
+    refresh();
+  </script>
+</body>
+</html>
